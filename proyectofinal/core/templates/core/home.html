@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}{{title}}{% endblock %}
+{% block content %}
+<section class="page-section clearfix">
+   <div class="container">
+      <div class="intro-text left-0 text-center bg-faded p-5 rounded">
+         <h2 class="section-heading mb-4">
+            <span class="section-heading-upper">Monitorea tus placas solares</span>
+         </h2>
+         <p class="mb-3">Mantén un histórico de tus placas solares. Conoce su rendimiento y el ahorro que has conseguido.</p>
+         {% if not request.user.is_authenticated %}
+            <div class="intro-button mx-auto">
+               <a class="btn btn-primary btn-xl" href="{% url 'login' %}">Log in</a>
+            </div>
+         {% else %}
+            <div class="intro-button mx-auto">
+               <a class="btn btn-primary btn-xl" href="{% url 'kit_list' %}">Mis equipos solares</a>
+            </div>
+         {% endif %}
+      </div>
+   </div>
+</section>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Registro de datos{% endblock %}
+{% block content %}
+<section class="page-section about-heading">
+   <h2 class="section-heading mb-4">
+      <span class="section-heading-upper">Añade registros de tu equipo solar</span>
+   </h2>
+   <div class="bg-faded rounded p-5">
+      <!-- formulario -->
+      <form method="POST" action="{% url 'data_add_file' kit.id %}" enctype="multipart/form-data">
+         {% csrf_token %}
+         {{ form.as_p }}
+         <h6> Sube un archivo CSV con los datos de consumo y generación.</h6>
+            <p> El archivo debe tener las siguientes columnas:
+            <ul>
+               <li>Date</li>
+               <li>Yield(Wh)</li>
+               <li>Consumption(Wh)</li>
+               <li>Max. PV power(W)</li>
+               <li>Max. PV voltage(V)</li>
+               <li>Min. battery voltage(V)</li>
+               <li>Max. battery voltage(V)</li>
+               <li>Time in bulk(m)</li>
+               <li>Time in absorption(m)</li>
+               <li>Time in float(m)</li>
+            </ul>
+            </p>
+         <button type="submit" class="btn btn-primary">Añadir</button>
+     </form> 
+      <!-- fin formulario -->
+   </div>
+</section>
+{% endblock %}

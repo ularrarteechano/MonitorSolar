@@ -1,0 +1,64 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="page-section about-heading">
+   {% if object_list %}
+      <div class="intro-button my-5">
+         <a class="btn btn-primary btn-xl" href="{% url 'data_chart' kit.id year month %}">Ver gráfico</a>
+      </div>
+   {% endif %}
+   <div class="bg-faded rounded">
+      <form method="POST" action="{% url 'data_table' kit.id year month %}">
+         {% csrf_token %}
+         <h2 class="section-heading my-4">
+            <span class="section-heading-upper">Selecciona el mes y año</span>
+         </h2>
+         {{ form.as_table }}
+         <button type="submit" class="btn btn-info btn-sm mx-4">Ver</button>
+      </form>
+   </div>
+   <div class="bg-faded rounded">
+      <h2 class="section-heading my-4">
+         <span class="section-heading-upper">Histórico de registros</span>
+      </h2>
+      <!-- lista -->
+      {% if object_list %}
+      <table class="table table-striped">
+         <thead>
+         <tr>
+          <th>Fecha</th>
+          <th>Energía Generada</th>
+          <th>Bulk Time</th>
+          <th>Acciones</th>
+          </tr>
+          </thead>
+          <tbody>
+      {% for data in object_list %}
+          <tr>
+          <td>{{ data.date }}</td>
+          <td>{{ data.yield_wh }}</td>
+          <td>{{ data.bulk_time }}</td>
+          <td>
+          <a href="{% url 'data_update' kit.id data.id %}" class="btn btn-warning btn-sm">Editar</a>
+          <a href="{% url 'data_delete' kit.id data.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+          </td>
+         </tr>
+      {% endfor %}
+         </tbody>
+      </table>
+      {% else %}
+         <p>No hay registros disponibles.</p>
+      {% endif %}
+      <!-- fin lista -->
+   </div>
+   {% if kit.active %}
+      <div class="intro-button my-5">
+         <a class="btn btn-primary btn-xl" href="{% url 'data_add' kit.id %}">Añadir registro</a>
+      </div>
+      <div class="intro-button my-5">
+         <a class="btn btn-primary btn-xl" href="{% url 'data_add_file' kit.id %}">Añadir fichero csv con registros</a>
+      </div>
+   {% endif %}
+</section>
+{% endblock %}

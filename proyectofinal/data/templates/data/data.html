@@ -1,0 +1,39 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<section class="page-section about-heading">
+   <h2 class="section-heading mb-4">
+      <span class="section-heading-upper">Listado de equipos solares</span>
+   </h2>
+   <div class="bg-faded rounded px-5">
+      <!-- lista -->
+      <table>
+         <tbody>
+            {% for kit in kits %}
+             <tr>
+                   <td>
+                     {% if kit.active %}
+                     <p class="m-3">Equipo Solar: {{kit.name}}</a></p>
+                     {% else %}
+                     <p class="text-secondary m-3">Equipo Solar: {{kit.name}}</a></p>
+                     {% endif %}
+                   </td>
+                   <td>
+                     <p class="m-3"><a href="{% url 'data_chart' kit.id year month %}">Ver gráfico <i class="fas fa-chart-bar"></i></a></p>
+                   </td>
+                   <td>
+                     <p class="m-3"><a href="{% url 'data_table' kit.id year month %}">Ver tabla <i class="fas fa-table-cells"></i></a></p>
+                   </td>
+                   <td>
+                     <p class="m-3"> <a href="{% url 'kit_detail' kit.id %}">Ver detalles</a></p>
+                   </td>
+                 
+             </tr>
+            {% endfor %}
+         </tbody>
+     </table>
+      <!-- fin lista -->
+   </div>
+</section>
+{% endblock %}

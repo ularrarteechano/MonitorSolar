@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Equipos Solares{% endblock %}
+{% block content %}
+<section class="page-section about-heading">
+   <h2 class="section-heading mb-4">
+      <span class="section-heading-upper">Listado de equipos solares</span>
+   </h2>
+   <div class="bg-faded rounded px-5">
+      <!-- lista -->
+      {% for kit in kits %}
+        <h5>Equipo solar: {{kit.name}} </h5>
+        {% if kit.active %}
+        <p> Activo: <i class="fa-solid fa-check" style="color:rgb(4, 166, 69);"></i> </p>
+        {% else %}
+         <p> Activo: <i class="fa-solid fa-xmark" style="color:rgb(255, 0, 0);"></i> </p>
+         {% endif %}
+        <p class="mb-3"><a href="{% url 'kit_detail' kit.id %}"> Ver detalles</a></p>
+      {% endfor %}
+      <!-- fin lista -->
+   </div>
+   <div class="intro-button my-5">
+      <a class="btn btn-primary btn-xl" href="{% url 'kit_create' %}">Crear nuevo</a>
+   </div>
+</section>
+{% endblock %}
