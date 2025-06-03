@@ -1,6 +1,6 @@
 from django import forms
 
-class ContactFrom(forms.Form):
+class ContactForm(forms.Form):
     name = forms.CharField(required=True, label='Nombre', widget=forms.TextInput(
         attrs={
             'class': 'form-control'

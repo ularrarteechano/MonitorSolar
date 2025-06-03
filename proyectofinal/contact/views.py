@@ -1,19 +1,23 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.mail import EmailMessage
-from .forms import ContactFrom
+from .forms import ContactForm
 
 # Create your views here.
 def contact(request):
-    contact_form = ContactFrom()
+    contact_form = ContactForm()
     if request.method == 'POST':
-        contact_form = ContactFrom(data=request.POST)
+        contact_form = ContactForm(data=request.POST)
         if contact_form.is_valid():
+            name = request.POST.get('name', '')
+            email = request.POST.get('email', '')
+            content = request.POST.get('content', '')
             email = EmailMessage(
-               "asunto",
-               "cuerpo",
-               "no-contestar@prueba.com",
-               ["prueba@prueba.com"],
+               "Monitor Solar: Nuevo mensaje de contacto",
+               "De {} <{}>\n\nEscribió:\n\n{}".format(name, email, content),
+               "monitorsolarcontact@gmail.com",
+               ["monitorsolarcontact@gmail.com"],
+                reply_to=[email]
             )
             try:
                 email.send()
