@@ -1,33 +1,18 @@
 {% extends 'core/base.html' %} {% load static %} {% block title %}Placas
 Solares{% endblock %} {% block content %}
-<section class="page-section about-heading">
-  <h2 class="section-heading">
-    <span class="section-heading-upper">Da de alta una nueva placa solar</span>
-  </h2>
-  <div class="bg-faded rounded p-5">
-    <!-- formulario -->
-    <form method="POST" action="{% url 'panel_add' kit.id %}">
-      {% csrf_token %} {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">Dar de alta</button>
-    </form>
-    <!-- formulario -->
+<section class="page-section clearfix">
+  <div class="container">
+    <h2 class="section-heading mb-4">
+      <span class="section-heading-upper">Da de alta una nueva placa solar</span>
+    </h2>
+    <div class="bg-faded rounded px-5">
+      <!-- formulario -->
+      <form method="POST" action="{% url 'panel_add' kit.id %}">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Dar de alta</button>
+      </form>
+      <!-- formulario -->
+    </div>
   </div>
-  <!-- errores
-      {% if form.errors %}
-      <div class="alert alert-danger mt-3">
-         <strong>Por favor corrige los siguientes errores:</strong>
-         <ul>
-            {% for field in form %}
-                {% for error in field.errors %}
-                  <li>{{ field.label }}: {{ error }}</li>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-         </ul>
-      </div>
-      {% endif %}
-      fin errores -->
 </section>
 {% endblock %}

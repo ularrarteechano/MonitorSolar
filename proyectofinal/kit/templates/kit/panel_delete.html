@@ -2,16 +2,19 @@
 {% load static %}
 {% block title %}Equipos Solares{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
-  <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Eliminar panel solar</span>
-  </h2>
-  <div class="bg-faded rounded px-5 mb-3">
-    <p>¿Está seguro de que desea eliminar el panel solar {{ panel.brand }} - {{ panel.type }} - {{ panel.watts }}W - {{ panel.voltage }}V ?</p>
-    <form method="POST" action="{% url 'panel_delete' kit.id panel.id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger btn-xl mt-2">Eliminar</button>
-      <a class="btn btn-secondary btn-xl mt-2" href="{% url 'kit_detail' kit.id %}">Cancelar</a>
-    </form>
+<section class="page-section clearfix">
+  <div class="container">
+    <h2 class="section-heading mb-4">
+      <span class="section-heading-upper">Eliminar panel solar</span>
+    </h2>
+    <div class="bg-faded rounded px-5 mb-3">
+      <p>¿Está seguro de que desea eliminar el panel solar {{ panel.brand }} - {{ panel.type }} - {{ panel.watts }}W - {{ panel.voltage }}V ?</p>
+      <form method="POST" action="{% url 'panel_delete' kit.id panel.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-xl mt-2">Eliminar</button>
+        <a class="btn btn-secondary btn-xl mt-2" href="{% url 'kit_detail' kit.id %}">Cancelar</a>
+      </form>
+    </div>
   </div>
+</section>
 {% endblock %}

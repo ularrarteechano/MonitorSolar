@@ -1,60 +1,67 @@
-{% extends 'core/base.html' %} {% load static %} {% block title %}Equipos
-Solares{% endblock %} {% block content %}
-<section class="page-section about-heading">
-  <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Equipo solar: {{kit.name}} </span>
-  </h2>
-  <div class="bg-faded rounded px-5 mb-3">
-    <!-- lista -->
-    <p><b>Activo</b>: {{kit.active}}</p>
-    <p><b>Fecha instalación</b>: {{kit.installed}}</p>
-    <p><b>Fecha alta</b>: {{kit.created}}</p>
-    <!-- fin lista -->
-    <div class="row">
-      <div class ="col-lg-2">
-      <a class="btn btn-info btn-xl mb-4" href="{% url 'kit_update' kit.id %}">Actualizar equipo</a>
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Equipos Solares{% endblock %}
+{% block content %}
+<section class="page-section clearfix">
+  <div class="container">
+    <h2 class="section-heading mb-4">
+        <span class="section-heading-upper">Equipo solar: {{ kit.name }}</span>
+    </h2>
+    <div class="bg-faded rounded px-5 mb-3">
+        <!-- lista -->
+        <p><b>Activo</b>: {{ kit.active }}</p>
+        <p><b>Fecha instalación</b>: {{ kit.installed }}</p>
+        <p><b>Fecha alta</b>: {{ kit.created }}</p>
+        <!-- fin lista -->
+        <div class="row">
+            <div class="col-lg-2">
+                <a class="btn btn-info btn-xl mb-4" href="{% url 'kit_update' kit.id %}">Actualizar equipo</a>
+            </div>
+            <div class="col-lg-2">
+                <a class="btn btn-danger btn-xl mb-4" href="{% url 'kit_delete' kit.id %}">Eliminar equipo</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <h3>Placas solares</h3>
+                {% if kit.solar_panels.all %}
+                    <ul>
+                        {% for panel in kit.solar_panels.all %}
+                            <li>
+                                {{ panel.brand }} - {{ panel.type }} - {{ panel.watts }}W - {{ panel.voltage }}V  
+                                <a href="{% url 'panel_update' kit.id panel.id %}"><i class="far fa-edit"></i></a> |
+                                <a href="{% url 'panel_delete' kit.id panel.id %}"><i class="fa fa-trash" style="color:red"></i></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No hay placas solares registradas.</p>
+                {% endif %}
+                {% if kit.active %}
+                    <a class="btn btn-primary btn-xl mb-4" href="{% url 'panel_add' kit.id %}">Añadir placa</a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <h3>Regulador Solar</h3>
+                {% if kit.charge_controller %}
+                    <p>
+                        {{ kit.charge_controller.brand }} - {{ kit.charge_controller.type }} - {{ kit.charge_controller.max_voltage }}/{{ kit.charge_controller.max_amps }}
+                        <a href="{% url 'controller_update' kit.id kit.charge_controller.id %}"><i class="far fa-edit"></i></a> |
+                        <a href="{% url 'controller_delete' kit.id kit.charge_controller.id %}"><i class="fa fa-trash" style="color:red"></i></a>
+                    </p>
+                {% else %}
+                    <p>No hay reguladores registrados.</p>
+                    {% if kit.active %}
+                        <a class="btn btn-primary btn-xl mb-4" href="{% url 'controller_add' kit.id %}">Añadir regulador</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class ="col-lg-2">
-        <a class="btn btn-danger btn-xl mb-4" href="{% url 'kit_delete' kit.id %}">Eliminar equipo</a>
+    <div class="intro-button">
+      <a class="btn btn-secondary btn-xl mt-2"
+         href="{% url 'data' %}">Volver</a>
     </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6">
-        <h3>Placas solares</h3>
-        {% if kit.solar_panels.all %}
-          <ul>
-          {% for panel in kit.solar_panels.all %}
-            <li>
-              {{ panel.brand }} - {{ panel.type }} - {{ panel.watts }}W - {{ panel.voltage }}V  
-              <a href="{% url 'panel_update' kit.id panel.id %}"><i class="far fa-edit"></i></a> |
-              <a href="{% url 'panel_delete' kit.id panel.id %}"><i class="fa fa-trash" style="color:red"></i></a>
-            </li>
-          {% endfor %}
-          </ul>
-        {% else %}
-          <p>No hay placas solares registradas.</p>
-        {% endif %}
-        {% if kit.active %}
-          <a class="btn btn-primary btn-xl mb-4" href="{% url 'panel_add' kit.id %}">Añadir placa solar</a>
-        {% endif %}  
-      </div> 
-      <div class="col-lg-6">
-        <h3>Regulador Solar</h3>
-        {% if kit.charge_controller %}
-          <p> {{ kit.charge_controller.brand }} - {{ kit.charge_controller.type }} - {{ kit.charge_controller.max_voltage }}/{{ kit.charge_controller.max_amps }} 
-            <a href="{% url 'controller_update' kit.id kit.charge_controller.id %}"><i class="far fa-edit"></i></a> |
-            <a href="{% url 'controller_delete' kit.id kit.charge_controller.id %}"><i class="fa fa-trash" style="color:red"></i></a>
-          </p>
-        {% else %}
-          <p>No hay reguladores registrados.</p>
-          {% if kit.active %}
-          <a class="btn btn-primary btn-xl mb-4" href="{% url 'controller_add' kit.id %}">Añadir regulador</a>
-          {% endif %}
-        {% endif %}
-      </div>
-    </div>
+  </div>
 </section>
-<div class="intro-button">
-  <a class="btn btn-secondary btn-xl mt-2" href="{% url 'kit_list' %}">Atrás</a>
-</div>
 {% endblock %}

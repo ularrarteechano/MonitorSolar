@@ -10,6 +10,6 @@ class HomeView(TemplateView):
         context['title'] = 'Inicio'
         return context
 
-class DashboardView(TemplateView):
-    template_name = 'core/dashboard.html'
+class DataView(TemplateView):
+    template_name = 'core/data.html'
 

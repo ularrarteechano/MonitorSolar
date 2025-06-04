@@ -2,34 +2,55 @@
 {% load static %}
 {% block title %}Contacto{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
-   <div class="container" style="background-image: url('{% static 'core/img/contact.jpg' %}'); background-size: cover; background-position: center; border-radius: 0.5rem; min-height: 300px; color: white">
-      <div class="about-heading-content">
-         <div class="row">
-            <div class="col-xl-9 col-lg-10 mx-auto">
-               <div class="bg-faded rounded p-5">
-                  <h2 class="section-heading mb-4">
-                     <span class="section-heading-upper">Contacta con nosotros</span>
-                  </h2>
-                  <!-- Formulario de contacto -->
-                  {% if 'ok' in request.GET%}
-                  <p><b>Mensaje enviado correctamente</b></p>
-                  {% elif 'fail' in request.GET %}
-                  <p><b>Ha ocurrido un error, inténtelo más tarde</b></p>
-                  {% endif %}
-                  {% if form.errors %}
-                  {% endif %}
-                  <form action='' method='POST'>
-                     {% csrf_token %}
-                     <table class=''>
-                        {{form.as_table}}
-                     </table>
-                     <div class='text-center'>
-                        <input type="submit" class="btn btn-primary btn-block py-2" value="Enviar">
-                     </div>
-                  </form>
-                  <!-- Fin formulario de contacto -->
+<section class="page-section clearfix">
+   <div class="container d-flex align-items-center justify-content-center"
+        style="background: url('{% static 'core/img/contact_bg.jpg' %}') center center/cover no-repeat; border-radius: 0.5rem; min-height: 400px;">
+      <div class="row w-100 justify-content-center">
+         <div class="col-xl-5 col-lg-6 col-md-8">
+            {% if 'ok' in request.GET %}
+               <div class="alert alert-success text-center mb-4">
+                  <b>Mensaje enviado correctamente</b>
                </div>
+            {% elif 'fail' in request.GET %}
+               <div class="alert alert-danger text-center mb-4">
+                  <b>Ha ocurrido un error, inténtelo más tarde</b>
+               </div>
+            {% endif %}
+            <div class="rounded p-4 my-5" style="color:rgba(208, 164, 135, 0.85);">
+               <h2 class="section-heading my-4">
+                  <span class="section-heading-upper">Contacta con nosotros</span>
+               </h2>
+               <!-- Formulario de contacto -->
+               {% if form.errors %}
+                  <div class="alert alert-danger">
+                     <ul class="mb-0">
+                        {% for field in form %}
+                           {% for error in field.errors %}
+                              <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                           {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                           <li>{{ error }}</li>
+                        {% endfor %}
+                     </ul>
+                  </div>
+               {% endif %}
+               <form action="" method="POST" novalidate>
+                  {% csrf_token %}
+                  {% for field in form %}
+                     <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                           <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                     </div>
+                  {% endfor %}
+                  <div class="text-center">
+                     <button type="submit" class="btn custom-btn w-100 py-2">Enviar</button>
+                  </div>
+               </form>
+               <!-- Fin formulario de contacto -->
             </div>
          </div>
       </div>

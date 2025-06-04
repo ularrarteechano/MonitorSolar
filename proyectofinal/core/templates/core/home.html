@@ -4,20 +4,36 @@
 {% block content %}
 <section class="page-section clearfix">
    <div class="container">
-      <div class="intro-text left-0 text-center bg-faded p-5 rounded">
-         <h2 class="section-heading mb-4">
-            <span class="section-heading-upper">Monitorea tus placas solares</span>
-         </h2>
-         <p class="mb-3">Mantén un histórico de tus placas solares. Conoce su rendimiento y el ahorro que has conseguido.</p>
-         {% if not request.user.is_authenticated %}
-            <div class="intro-button mx-auto">
-               <a class="btn btn-primary btn-xl" href="{% url 'login' %}">Log in</a>
-            </div>
-         {% else %}
-            <div class="intro-button mx-auto">
-               <a class="btn btn-primary btn-xl" href="{% url 'kit_list' %}">Mis equipos solares</a>
-            </div>
-         {% endif %}
+      <!-- Banner con imagen de fondo -->
+      <div class="position-relative rounded overflow-hidden mb-5" style="height: 320px;">
+         <img src="{% static 'core/img/solar_banner.jpg' %}" alt="Paneles solares" class="w-100 h-100 object-fit-cover">
+         <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center align-items-center" style="background: rgba(0,0,0,0.45);">
+            <h1 class="text-white fw-bold display-5 mb-3">Monitor Solar</h1>
+            <p class="text-white fs-4 mb-4 text-center">Monitorea y optimiza el rendimiento de tus placas solares</p>
+            {% if not request.user.is_authenticated %}
+               <a class="btn btn-primary btn-lg px-5 py-2" href="{% url 'login' %}">Accede a tu panel</a>
+            {% else %}
+               <a class="btn btn-success btn-lg px-5 py-2" href="{% url 'data' %}">Ir a mis equipos solares</a>
+            {% endif %}
+         </div>
+      </div>
+      <!-- Beneficios -->
+      <div class="row text-center mb-5">
+         <div class="col-md-4 mb-4">
+            <i class="fas fa-chart-line fa-3x text-primary mb-3"></i>
+            <h5>Histórico de datos</h5>
+            <p>Consulta y almacena datos históricos de tus equipos solares.</p>
+         </div>
+         <div class="col-md-4 mb-4">
+            <i class="fas fa-thumbs-up fa-3x text-success mb-3"></i>
+            <h5>Fácil de usar</h5>
+            <p>Interfaz intuitiva y sencilla para que cualquier usuario pueda gestionar sus equipos solares sin complicaciones.</p>
+         </div>
+         <div class="col-md-4 mb-4">
+            <i class="fas fa-gift fa-3x text-info mb-3"></i>
+            <h5>Servicio gratuito</h5>
+            <p>Disfruta de todas las funcionalidades sin coste alguno.</p>
+         </div>
       </div>
    </div>
 </section>

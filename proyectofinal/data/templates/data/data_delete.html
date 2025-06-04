@@ -2,20 +2,24 @@
 {% load static %}
 {% block title %}Registro de datos{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
-   <h2 class="section-heading">
-      <span class="section-heading-upper">Eliminar registro de tu equipo solar</span>
-   </h2>
-   <div class="bg-faded rounded p-5">
-      <!-- formulario -->
-      <form method="POST" action="{% url 'data_delete' kit.id data.id %}">
-         {% csrf_token %}
-         <p>¿Estás seguro de que deseas eliminar este registro?</p>
-         <li> <b>Fecha:</b> {{data.date}}</li>
-         <li> <b>Energía Generada:</b> {{data.yield_wh}} Wh</li>
-        <li> <b>Bulk Time:</b> {{data.bulk_time}} min</li>    
-         <button type="submit" class="btn btn-danger mt-4">Eliminar</button>
-      </form>
-      <!-- fin formulario -->
+<section class="page-section clearfix">
+   <div class="container">
+      <h2 class="section-heading mb-4">
+         <span class="section-heading-upper">Eliminar registro de tu equipo solar</span>
+      </h2>
+      <div class="bg-faded rounded px-5">
+         <!-- formulario -->
+         <form method="POST" action="{% url 'data_delete' kit.id data.id %}">
+            {% csrf_token %}
+            <p>¿Estás seguro de que deseas eliminar este registro?</p>
+            <li> <b>Fecha:</b> {{data.date}}</li>
+            <li> <b>Energía Generada:</b> {{data.yield_wh}} Wh</li>
+         <li> <b>Bulk Time:</b> {{data.bulk_time}} min</li>    
+            <button type="submit" class="btn btn-danger mt-3">Eliminar</button>
+            <a class="btn btn-secondary btn-xl mt-3" href="{% url 'data_table' kit.id year month %}">Cancelar</a>
+         </form>
+         <!-- fin formulario -->
+      </div>
    </div>
+</section
 {% endblock %}

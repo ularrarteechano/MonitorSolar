@@ -2,7 +2,8 @@
 {% load static %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
+<section class="page-section clearfix">
+   <div class="container">
    {% if object_list %}
       <div class="intro-button my-5">
          <a class="btn btn-primary btn-xl" href="{% url 'data_chart' kit.id year month %}">Ver gráfico</a>
@@ -40,8 +41,8 @@
           <td>{{ data.yield_wh }}</td>
           <td>{{ data.bulk_time }}</td>
           <td>
-          <a href="{% url 'data_update' kit.id data.id %}" class="btn btn-warning btn-sm">Editar</a>
-          <a href="{% url 'data_delete' kit.id data.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+          <a href="{% url 'data_update' kit.id data.id %}?year={{ year }}&month={{ month }}" class="btn btn-warning btn-sm">Editar</a>
+          <a href="{% url 'data_delete' kit.id data.id %}?year={{ year }}&month={{ month }}" class="btn btn-danger btn-sm">Eliminar</a>
           </td>
          </tr>
       {% endfor %}
@@ -60,5 +61,6 @@
          <a class="btn btn-primary btn-xl" href="{% url 'data_add_file' kit.id %}">Añadir fichero csv con registros</a>
       </div>
    {% endif %}
+   </div>
 </section>
 {% endblock %}

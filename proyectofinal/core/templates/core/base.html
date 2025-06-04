@@ -16,34 +16,35 @@
    </head>
    <body>
       <div class="container-fluid">
-         <div class="row">
+         <div class="row flex-nowrap">
             <!-- Sidebar -->
-            <div class="col-md-2 p-0 sidebar">
+            <nav id="sidebarMenu" class="col-12 col-md-2 p-0 sidebar collapse d-md-block">
                <div class="p-4">
                   <a href="{% url 'home' %}" class="text-decoration-none">
                      <h5>Monitor Solar</h5>
                   </a>
                </div>
                <div class="nav flex-column">
-                  <a href="{% url 'kit_list' %}">
-                  <i class="fas fa-solar-panel me-2"></i> Equipos Solares
+                  <a href="{% url 'data' %}">
+                     <i class="fas fa-solar-panel me-2"></i> Equipos Solares
                   </a>
-                  <a href="{% url 'dashboard' %}">
-                     <i class="fas fa-tachometer-alt me-2"></i> Dashboard
-                     </a>
-                  <a href="{% url 'contact' %}">
-                  <i class="far fa-envelope me-2"></i> Contacto
+                  <a href="{% url 'contact' %}"  class="mt-5">
+                     <i class="far fa-envelope me-2"></i> Contacto
                   </a>
                </div>
-            </div>
+            </nav>
             <!-- Main Content -->
-            <div class="col-md-10 content">
+            <div class="col px-0 content">
                <!-- Navbar -->
                <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
                   <div class="container-fluid">
+                     <!-- Botón hamburguesa solo visible en móviles -->
+                     <button class="navbar-toggler d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                     </button>
                      <span class="navbar-brand">
-                     <i class="fas fa-solar-panel text-info me-2"></i> 
-                     Sistema de Monitoreo de Placas Solares
+                        <i class="fas fa-solar-panel text-info me-2"></i> 
+                        Sistema de Monitoreo de Placas Solares
                      </span>
                      <div class="ms-auto d-flex align-items-center">
                         {% if not request.user.is_authenticated %}

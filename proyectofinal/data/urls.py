@@ -3,7 +3,7 @@ from .views import DataView, DataMonthTableView, DataMonthChartView, DataCreateV
     DataUpdateView, DataDeleteView
 
 urlpatterns = [
-    path('', DataView.as_view(), name='dashboard'),
+    path('', DataView.as_view(), name='data'),
     path('<int:kit_id>/table/<int:year>/<int:month>/', DataMonthTableView.as_view(), name='data_table'),
     path('<int:kit_id>/chart/<int:year>/<int:month>/', DataMonthChartView.as_view(), name='data_chart'),
     path('<int:kit_id>/add/', DataCreateView.as_view(), name='data_add'),

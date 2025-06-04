@@ -2,7 +2,8 @@
 {% load static %}
 {% block title %}Equipos Solares{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
+<section class="page-section clearfix">
+   <div class="container">
    <h2 class="section-heading mb-4">
       <span class="section-heading-upper">Listado de equipos solares</span>
    </h2>
@@ -22,5 +23,6 @@
    <div class="intro-button my-5">
       <a class="btn btn-primary btn-xl" href="{% url 'kit_create' %}">Crear nuevo</a>
    </div>
+</div>
 </section>
 {% endblock %}

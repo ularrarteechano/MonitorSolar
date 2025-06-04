@@ -2,38 +2,72 @@
 {% load static %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
-   <h2 class="section-heading mb-4">
-      <span class="section-heading-upper">Listado de equipos solares</span>
-   </h2>
-   <div class="bg-faded rounded px-5">
-      <!-- lista -->
-      <table>
-         <tbody>
-            {% for kit in kits %}
-             <tr>
-                   <td>
+<section class="page-section clearfix">
+   <div class="container">
+      <h2 class="section-heading mb-4">
+         <span class="section-heading-upper">Datos de tus equipos solares</span>
+      </h2>
+      <div class="bg-faded rounded px-4 py-4 shadow-sm">
+         <table class="table align-middle table-hover table-semitransparent">
+            <thead>
+               <tr>
+                  <th>Equipo</th>
+                  <th>Detalles</th>
+                  <th>Gráfico</th>
+                  <th>Tabla</th>
+                  <th>Nuevo registro</th>
+                  <th>Importar fichero</th>
+               </tr>
+            </thead>
+            <tbody>
+               {% for kit in kits %}
+               <tr>
+                  <td>
                      {% if kit.active %}
-                     <p class="m-3">Equipo Solar: {{kit.name}}</a></p>
+                        <span class="fw-bold text-success">
+                           <i class="fa-solid fa-circle me-1"></i>{{ kit.name }}
+                        </span>
                      {% else %}
-                     <p class="text-secondary m-3">Equipo Solar: {{kit.name}}</a></p>
+                        <span class="text-secondary">
+                           <i class="fa-regular fa-circle me-1"></i>{{ kit.name }}
+                        </span>
                      {% endif %}
-                   </td>
-                   <td>
-                     <p class="m-3"><a href="{% url 'data_chart' kit.id year month %}">Ver gráfico <i class="fas fa-chart-bar"></i></a></p>
-                   </td>
-                   <td>
-                     <p class="m-3"><a href="{% url 'data_table' kit.id year month %}">Ver tabla <i class="fas fa-table-cells"></i></a></p>
-                   </td>
-                   <td>
-                     <p class="m-3"> <a href="{% url 'kit_detail' kit.id %}">Ver detalles</a></p>
-                   </td>
-                 
-             </tr>
-            {% endfor %}
-         </tbody>
-     </table>
-      <!-- fin lista -->
+                  </td>
+                  <td>
+                     <a class="btn btn-outline-info btn-sm" href="{% url 'kit_detail' kit.id %}">
+                        <i class="fas fa-info-circle"></i> Detalles
+                     </a>
+                  </td>
+                  <td>
+                     <a class="btn btn-outline-primary btn-sm" href="{% url 'data_chart' kit.id year month %}">
+                        <i class="fas fa-chart-bar"></i> Gráfico
+                     </a>
+                  </td>
+                  <td>
+                     <a class="btn btn-outline-secondary btn-sm" href="{% url 'data_table' kit.id year month %}">
+                        <i class="fas fa-table-cells"></i> Tabla
+                     </a>
+                  </td>
+                  <td>
+                     <a class="btn btn-outline-success btn-sm" href="{% url 'data_add' kit.id %}">
+                        <i class="fas fa-plus"></i> Añadir
+                     </a>
+                  </td>
+                  <td>
+                     <a class="btn btn-outline-warning btn-sm" href="{% url 'data_add_file' kit.id %}">
+                        <i class="fas fa-file-upload"></i> Fichero
+                     </a>
+                  </td>
+               </tr>
+               {% endfor %}
+            </tbody>
+         </table>
+      </div>
+      <div class="d-flex justify-content-end mt-3">
+         <a class="btn btn-primary" href="{% url 'kit_create' %}">
+            <i class="fas fa-plus"></i> Crear nuevo equipo solar
+         </a>
+      </div>
    </div>
 </section>
 {% endblock %}

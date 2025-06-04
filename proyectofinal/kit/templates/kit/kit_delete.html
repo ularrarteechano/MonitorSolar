@@ -2,23 +2,25 @@
 {% load static %}
 {% block title %}Equipos Solares{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
-  <h2 class="section-heading mb-4">
-    <span class="section-heading-upper">Eliminar equipo solar</span>
-  </h2>
-  <div class="bg-faded rounded px-5 mb-3">
-    <p>¿Está seguro de que desea eliminar el equipo solar {{kit.name}}?</p>
-    <div class="alert alert-danger mt-3">
-         <strong>Al borrar la información de un equipo solar, se eliminarán todos los datos relacionados con este equipo:</strong>
-         <li> Los paneles solares asociados </li>
-        <li> El regulador solar asociado </li>
-        <li> Todos los datos registrados </li>
-        <br><p> Puedes deshabilitar el equipo solar sin eliminarlo permanentemente, deselecciona el campo "Activo" en los detalles del equipo.</p>
+<section class="page-section clearfix">
+  <div class="container">
+    <h2 class="section-heading mb-4">
+      <span class="section-heading-upper">Eliminar equipo solar</span>
+    </h2>
+    <div class="bg-faded rounded px-5 mb-3">
+      <p>¿Está seguro de que desea eliminar el equipo solar {{kit.name}}?</p>
+      <div class="alert alert-danger mt-3">
+          <strong>Al borrar la información de un equipo solar, se eliminarán todos los datos relacionados con este equipo:</strong>
+          <li> Los paneles solares asociados </li>
+          <li> El regulador solar asociado </li>
+          <li> Todos los datos registrados </li>
+          <br><p> Puedes deshabilitar el equipo solar sin eliminarlo permanentemente, deselecciona el campo "Activo" en los detalles del equipo.</p>
+      </div>
+      <form method="POST" action="{% url 'kit_delete' kit.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-xl mt-2">Eliminar</button>
+        <a class="btn btn-secondary btn-xl mt-2" href="{% url 'kit_detail' kit.id %}">Cancelar</a>
+      </form>
     </div>
-    <form method="POST" action="{% url 'kit_delete' kit.id %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-danger btn-xl mt-2">Eliminar</button>
-      <a class="btn btn-secondary btn-xl mt-2" href="{% url 'kit_detail' kit.id %}">Cancelar</a>
-    </form>
   </div>
 {% endblock %}

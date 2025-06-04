@@ -2,7 +2,8 @@
 {% load static %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
-<section class="page-section about-heading">
+<section class="page-section clearfix">
+   <div class="container">
    {% if object_list %}
       <div class="intro-button my-5">
          <a class="btn btn-primary btn-xl" href="{% url 'data_table' kit.id year month %}">Ver datos en tabla</a>
@@ -38,6 +39,7 @@
          <a class="btn btn-primary btn-xl" href="{% url 'data_add_file' kit.id %}">Añadir fichero csv con registros</a>
       </div>
    {% endif %}
+   </div>
 </section>
 {{ labels|json_script:"labels-data" }}
 {{ values|json_script:"values-data" }}

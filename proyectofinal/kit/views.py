@@ -22,14 +22,19 @@ class KitDetailView(detail.DetailView):
     model2 = SolarPanel
     model3 = ChargeController
     template_name = 'kit/kit_detail.html'
-    
+
     def get_object(self, queryset=None):
         return get_object_or_404(Kit, id=self.kwargs['kit_id'], user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['referer'] = self.request.META.get('HTTP_REFERER')
+        return context
     
 @method_decorator(login_required, name='dispatch')
 class KitCreateView(edit.CreateView):
     form_class= KitForm
-    success_url = '/kit'
+    success_url = '/data'
     template_name = 'kit/kit_create.html'
 
     def form_valid(self, form):

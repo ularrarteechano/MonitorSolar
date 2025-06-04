@@ -2,6 +2,7 @@ import csv
 from datetime import datetime
 from io import TextIOWrapper
 from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
 from django.views.generic.dates import MonthArchiveView
@@ -126,7 +127,9 @@ class DataCreateView(CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         self.kit_id = self.kwargs.get('kit_id')
-        self.success_url = f'/data/{self.kit_id}/chart'
+        year = datetime.now().year
+        month = datetime.now().month
+        self.success_url = f'/data/{self.kit_id}/chart/{year}/{month}/'
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -156,7 +159,9 @@ class DataCreateFromFileView(FormView):
 
     def dispatch(self, request, *args, **kwargs):
         self.kit_id = self.kwargs.get('kit_id')
-        self.success_url = f'/data/{self.kit_id}/chart'
+        year = datetime.now().year
+        month = datetime.now().month
+        self.success_url = f'/data/{self.kit_id}/chart/{year}/{month}/'
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -246,23 +251,25 @@ class DataCreateFromFileView(FormView):
 
 @method_decorator(login_required, name='dispatch')
 class DataUpdateView(UpdateView):
-    form_class= DataUpdateForm
+    form_class = DataUpdateForm
     template_name = 'data/data_update.html'
 
-    def get_object(self, queryset = ...):
+    def get_object(self, queryset=None):
         return get_object_or_404(Data, id=self.kwargs['data_id'], kit__user=self.request.user)
-
-    def dispatch(self, request, *args, **kwargs):
-        self.kit_id = self.kwargs.get('kit_id')
-        self.success_url = f'/data/{self.kit_id}/table'
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         kit_id = self.kwargs.get('kit_id')
+        context['year'] = self.request.GET.get('year') or datetime.now().year
+        context['month'] = self.request.GET.get('month') or datetime.now().month
         context['kit'] = get_object_or_404(Kit, id=kit_id, user=self.request.user)
         context['data'] = get_object_or_404(Data, id=self.kwargs.get('data_id'), kit__user=self.request.user)
         return context
+
+    def get_success_url(self):
+        year = self.request.GET.get('year') or datetime.now().year
+        month = self.request.GET.get('month') or datetime.now().month
+        return reverse('data_table', args=[self.kwargs['kit_id'], year, month])
 
     def form_valid(self, form):
         kit_id = self.kwargs.get('kit_id')
@@ -282,12 +289,16 @@ class DataDeleteView(DeleteView):
 
     def dispatch(self, request, *args, **kwargs):
         self.kit_id = self.kwargs.get('kit_id')
-        self.success_url = f'/data/{self.kit_id}/table'
+        year = datetime.now().year
+        month = datetime.now().month
+        self.success_url = f'/data/{self.kit_id}/table/{year}/{month}/'
         return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         kit_id = self.kwargs.get('kit_id')
+        context['year'] = datetime.now().year
+        context['month'] = datetime.now().month
         context['kit'] = get_object_or_404(Kit, id=kit_id, user=self.request.user)
         context['data'] = get_object_or_404(Data, id=self.kwargs.get('data_id'), kit__user=self.request.user)
         return context

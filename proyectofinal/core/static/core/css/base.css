@@ -24,3 +24,35 @@
 .content {
     padding: 20px;
 }
+
+.custom-btn {
+    background-color: rgb(207, 121, 64);
+    color: #fff;
+    border: none;
+}
+.custom-btn:hover,
+.custom-btn:focus {
+    background-color: rgb(207, 121, 64);
+    color: #fff;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 767.98px) {
+    .sidebar {
+        min-height: auto;
+        position: fixed;
+        z-index: 1040;
+        width: 75vw;
+        max-width: 300px;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        transition: transform 0.3s ease-in-out;
+    }
+    .content {
+        padding: 10px;
+    }
+    body {
+        padding-right: 0 !important;
+    }
+}

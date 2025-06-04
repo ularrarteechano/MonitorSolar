@@ -56,7 +56,7 @@ class DataUpdateForm(forms.ModelForm):
                   'max_voltage', 'min_battery_voltage', 'max_battery_voltage', 
                   'bulk_time', 'absortion_time', 'float_time']
         widgets = {
-            'date': forms.DateInput(attrs={'type': 'date', 'disabled': True}, format='%Y-%m-%d'),
+            'date': forms.DateInput(attrs={'type': 'date', 'readonly': True}, format='%Y-%m-%d'),
             'yield_wh': forms.NumberInput(),
             'consumption': forms.NumberInput(),
             'max_power': forms.NumberInput(attrs={'step': '0.01'}),
@@ -78,6 +78,9 @@ class DataUpdateForm(forms.ModelForm):
             'bulk_time': 'Bulk Time (minutos)',
             'absortion_time': 'Absorption Time (minutos)',
             'float_time': 'Float Time (minutos)'
+        }
+        help_texts = {
+            'date': 'La fecha del registro no es modificable.'
         }
 
 class YearMonthForm(forms.Form):
