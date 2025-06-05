@@ -3,52 +3,82 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <section class="page-section clearfix">
-   <div class="container">
-   {% if object_list %}
-      <div class="intro-button my-5">
-         <a class="btn btn-primary btn-xl" href="{% url 'data_table' kit.id year month %}">Ver datos en tabla</a>
-      </div>
-   {% endif %}
-   <div class="bg-faded rounded">
-      <form method="POST" action="{% url 'data_chart' kit.id year month %}">
-         {% csrf_token %}
+    <div class="container">
+        {% if object_list %}
+            <div class="intro-button my-5">
+                <a class="btn btn-primary btn-xl" href="{% url 'data_table' kit.id year month %}">Ver datos en tabla</a>
+            </div>
             <h2 class="section-heading my-4">
-               <span class="section-heading-upper">Selecciona el mes y año</span>
+                <span class="section-heading-upper">Histórico de registros</span>
             </h2>
-            {{ form.as_table }}
-            <button type="submit" class="btn btn-info btn-sm mx-4">Ver</button>
-      </form>
-   </div>
-   <h2 class="section-heading my-4">
-      <span class="section-heading-upper">Histórico de registros</span>
-   </h2>
-   {% if object_list %}
-      <div id="chartjs-contener" style="width: 100%; height: 80% backgroundColor: grey">
-         <canvas id="myChart" width="400" height="200"></canvas>
-      </div>
-   {% else %}
-      <div class="bg-faded rounded">
-         <p>No hay registros disponibles.</p>
-      </div>
-   {% endif %}
-   {% if kit.active %}
-      <div class="intro-button my-5">
-         <a class="btn btn-primary btn-xl" href="{% url 'data_add' kit.id %}">Añadir registro</a>
-      </div>
-      <div class="intro-button my-5">
-         <a class="btn btn-primary btn-xl" href="{% url 'data_add_file' kit.id %}">Añadir fichero csv con registros</a>
-      </div>
-   {% endif %}
-   </div>
+            <div class="d-flex justify-content-center align-items-center my-3">
+                <a class="btn btn-outline-secondary mx-2 {% if not next_year or not next_month %}disabled{% endif %}"
+                   {% if next_year and next_month %}
+                       href="{% url 'data_chart' kit.id next_year next_month %}" title="Mes siguiente"
+                   {% else %}
+                       tabindex="-1" aria-disabled="true"
+                   {% endif %}>
+                    &#8592;
+                </a>
+                <div class="mx-2 d-flex align-items-center">
+                    <select id="year-select" class="form-control mx-1" style="min-width: 80px;">
+                        {% for y in years %}
+                            <option value="{{ y }}"{% if y == year %} selected{% endif %}>{{ y }}</option>
+                        {% endfor %}
+                    </select>
+                    <select id="month-select" class="form-control mx-1">
+                        {% for m in months_per_year %}
+                            <option value="{{ m }}"{% if m == month %} selected{% endif %}>{{ m|stringformat:"02d" }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <a class="btn btn-outline-secondary mx-2 {% if not prev_year or not prev_month %}disabled{% endif %}"
+                   {% if prev_year and prev_month %}
+                       href="{% url 'data_chart' kit.id prev_year prev_month %}" title="Mes anterior"
+                   {% else %}
+                       tabindex="-1" aria-disabled="true"
+                   {% endif %}>
+                    &#8594;
+                </a>
+            </div>
+            <div id="chartjs-contener" style="width: 100%; height: 80%">
+                <canvas id="myChart" width="400" height="200"></canvas>
+            </div>
+        {% else %}
+            <div class="bg-faded rounded">
+                <h2 class="section-heading my-4">
+                    <span class="section-heading-upper">Histórico de registros</span>
+                </h2>
+                <p>No hay registros disponibles.</p>
+            </div>
+        {% endif %}
+        {% if kit.active %}
+            <div class="intro-button my-5">
+                <a class="btn btn-primary btn-xl" href="{% url 'data_add' kit.id %}">Añadir registro</a>
+            </div>
+            <div class="intro-button my-5">
+                <a class="btn btn-primary btn-xl" href="{% url 'data_add_file' kit.id %}">Añadir fichero csv con registros</a>
+            </div>
+        {% endif %}
+    </div>
 </section>
+<script>
+    function goToSelectedMonth() {
+        var year = document.getElementById('year-select').value;
+        var month = document.getElementById('month-select').value;
+        window.location.href = "{% url 'data_chart' kit.id 9999 8888 %}".replace('9999', year).replace('8888', month);
+    }
+    document.getElementById('year-select').addEventListener('change', goToSelectedMonth);
+    document.getElementById('month-select').addEventListener('change', goToSelectedMonth);
+</script>
 {{ labels|json_script:"labels-data" }}
 {{ values|json_script:"values-data" }}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript" src="{% static 'data/js/chart.js' %}"></script>
 <script>
-   var labels = JSON.parse(document.getElementById('labels-data').textContent);
-   var values = JSON.parse(document.getElementById('values-data').textContent);
-   var label = "{{ label }}";
-   dashchart(labels, values, label);
- </script>
+    var labels = JSON.parse(document.getElementById('labels-data').textContent);
+    var values = JSON.parse(document.getElementById('values-data').textContent);
+    var label = "{{ label }}";
+    dashchart(labels, values, label);
+</script>
 {% endblock %}

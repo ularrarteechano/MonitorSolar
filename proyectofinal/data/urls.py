@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import DataView, DataMonthTableView, DataMonthChartView, DataCreateView, DataCreateFromFileView, \
-    DataUpdateView, DataDeleteView
+from .views import DataView, DataCreateView, DataCreateFromFileView, DataUpdateView, DataDeleteView
+from .views_table import DataMonthTableView
+from .views_chart import DataMonthChartView
 
 urlpatterns = [
     path('', DataView.as_view(), name='data'),

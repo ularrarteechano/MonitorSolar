@@ -1,14 +1,15 @@
 import csv
 from datetime import datetime
 from io import TextIOWrapper
-from django.shortcuts import get_object_or_404, redirect
-from django.urls import reverse
-from django.views.generic.list import ListView
-from django.views.generic.edit import CreateView, FormView, UpdateView, DeleteView
-from django.views.generic.dates import MonthArchiveView
-from django.utils.decorators import method_decorator
+
 from django.contrib.auth.decorators import login_required
-from .forms import DataForm, DataFileForm, DataUpdateForm, YearMonthForm
+from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic.edit import CreateView, DeleteView, FormView, UpdateView
+from django.views.generic.list import ListView
+
+from .forms import DataFileForm, DataForm, DataUpdateForm
 from .models import Data
 from kit.models import Kit
 
@@ -24,98 +25,6 @@ class DataView(ListView):
         context['year'] = datetime.now().year
         context['month'] = datetime.now().month
         return context
-    
-@method_decorator(login_required, name='dispatch')
-class DataMonthTableView(MonthArchiveView):
-    model = Data
-    date_field = 'date'
-    make_object_list = True
-    month_format = "%m"
-    allow_empty = True
-    template_name = 'data/data_table.html'
-
-    def get_queryset(self):
-        kit_id = self.kwargs['kit_id']
-        year = int(self.kwargs.get('year'))
-        month = int(self.kwargs.get('month'))
-        return Data.objects.filter(kit_id=kit_id, kit__user=self.request.user, date__year=year, date__month=month)
-
-    def dispatch(self, request, *args, **kwargs):
-        self.kit_id = self.kwargs.get('kit_id')
-        self.success_url = f'/kit/{self.kit_id}/'
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        kit_id = self.kwargs.get('kit_id')
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        context['kit'] = get_object_or_404(Kit, id=kit_id, user=self.request.user)
-        context['labels'] = list(Data.objects.filter(kit=kit_id).values_list('date', flat=True).order_by('-date'))
-        context['values'] = list(Data.objects.filter(kit=kit_id).values_list('yield_wh', flat=True).order_by('-date'))
-        context['label'] = 'Energía generada (Wh)'
-        context['year'] = year
-        context['month'] = month
-        context['form'] = YearMonthForm(initial={'year': year, 'month': month}) 
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        form = YearMonthForm(request.POST)
-        kit_id = self.kwargs.get('kit_id')
-        if form.is_valid():
-            year = form.cleaned_data['year']
-            month = int(form.cleaned_data['month'])
-            return redirect('data_table', kit_id=kit_id, year=year, month=month)
-        self.object_list = self.get_queryset()
-        context = self.get_context_data(**kwargs)
-        context['form'] = form
-        return self.render_to_response(context)
-
-@method_decorator(login_required, name='dispatch')
-class DataMonthChartView(ListView):
-    model = Data
-    date_field = 'date'
-    make_object_list = True
-    month_format = "%m"
-    allow_empty = True
-    template_name = 'data/data_chart.html'
-
-    def get_queryset(self):
-        kit_id = self.kwargs['kit_id']
-        year = int(self.kwargs.get('year'))
-        month = int(self.kwargs.get('month'))
-        return Data.objects.filter(kit_id=kit_id, kit__user=self.request.user, date__year=year, date__month=month)
-
-    def dispatch(self, request, *args, **kwargs):
-        self.kit_id = self.kwargs.get('kit_id')
-        self.success_url = f'/kit/{self.kit_id}/'
-        return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        kit_id = self.kwargs.get('kit_id')
-        year = self.kwargs.get('year')
-        month = self.kwargs.get('month')
-        context['kit'] = get_object_or_404(Kit, id=kit_id, user=self.request.user)
-        context['labels'] = list(Data.objects.filter(kit=kit_id, date__year=int(year), date__month=int(month)).values_list('date', flat=True).order_by('-date'))
-        context['values'] = list(Data.objects.filter(kit=kit_id, date__year=int(year), date__month=int(month)).values_list('yield_wh', flat=True).order_by('-date'))
-        context['label'] = 'Energía generada (Wh)'
-        context['year'] = year
-        context['month'] = month
-        context['form'] = YearMonthForm(initial={'year': year, 'month': month}) 
-        return context
-    
-    def post(self, request, *args, **kwargs):
-        form = YearMonthForm(request.POST)
-        kit_id = self.kwargs.get('kit_id')
-        if form.is_valid():
-            year = form.cleaned_data['year']
-            month = int(form.cleaned_data['month'])
-            return redirect('data_chart', kit_id=kit_id, year=year, month=month)
-        self.object_list = self.get_queryset()
-        context = self.get_context_data(**kwargs)
-        context['form'] = form
-        return self.render_to_response(context)
 
 @method_decorator(login_required, name='dispatch')
 class DataCreateView(CreateView):

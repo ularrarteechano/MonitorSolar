@@ -82,17 +82,3 @@ class DataUpdateForm(forms.ModelForm):
         help_texts = {
             'date': 'La fecha del registro no es modificable.'
         }
-
-class YearMonthForm(forms.Form):
-    year = forms.IntegerField(label='Año', min_value=2000, max_value=datetime.now().year)
-    month = forms.ChoiceField(label='Mes', choices=[(i, f'{i:02}') for i in range(1, 13)])
-    
-    def clean(self):
-        cleaned_data = super().clean()
-        year = cleaned_data.get('year')
-        month = cleaned_data.get('month')
-        
-        if year is not None and month is not None:
-            if datetime(year, int(month), 1) > datetime.now():
-                raise forms.ValidationError("La fecha no puede ser futura.")
-        return cleaned_data
