@@ -1,3 +1,4 @@
+from collections import defaultdict
 import csv
 from datetime import datetime
 from io import TextIOWrapper
@@ -12,6 +13,7 @@ from django.views.generic.list import ListView
 from .forms import DataFileForm, DataForm, DataUpdateForm
 from .models import Data
 from kit.models import Kit
+from .dates_utils import get_last_year_months
 
 # Create your views here.
 @method_decorator(login_required, name='dispatch')
@@ -21,9 +23,13 @@ class DataView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['kits'] = self.request.user.equipos_solares.all()
-        context['year'] = datetime.now().year
-        context['month'] = datetime.now().month
+        kits = self.request.user.equipos_solares.all()
+        context['kits'] = kits
+        if kits:
+            last_year_months = get_last_year_months(kits, Data)
+        else:
+            last_year_months = defaultdict(dict)
+        context['last_year_months'] = last_year_months
         return context
 
 @method_decorator(login_required, name='dispatch')

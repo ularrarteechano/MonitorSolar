@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load data.data_extras %}
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 <section class="page-section clearfix">
@@ -39,14 +40,31 @@
                      </a>
                   </td>
                   <td>
-                     <a class="btn btn-outline-primary btn-sm" href="{% url 'data_chart' kit.id year month %}">
-                        <i class="fas fa-chart-bar"></i> Gráfico
-                     </a>
+                     {% if last_year_months|get_item:kit.id|get_item:'year' and last_year_months|get_item:kit.id|get_item:'month' %}
+                        
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'data_chart' kit.id last_year_months|get_item:kit.id|get_item:'year' last_year_months|get_item:kit.id|get_item:'month' %}">
+                           <i class="fas fa-chart-bar"></i> Gráfico
+                        </a>
+
+                     {% else %}
+
+                        <span class="text-secondary">
+                           <i class="fas fa-chart-bar"></i> Gráfico no disponible
+                        </span>
+                     {% endif %}
                   </td>
                   <td>
-                     <a class="btn btn-outline-secondary btn-sm" href="{% url 'data_table' kit.id year month %}">
-                        <i class="fas fa-table-cells"></i> Tabla
-                     </a>
+                     {% if last_year_months|get_item:kit.id|get_item:'year' and last_year_months|get_item:kit.id|get_item:'month' %}
+                       
+                        <a class="btn btn-outline-secondary btn-sm" href="{% url 'data_table' kit.id last_year_months|get_item:kit.id|get_item:'year' last_year_months|get_item:kit.id|get_item:'month' %}">
+                           <i class="fas fa-table-cells"></i> Tabla
+                        </a>
+                     {% else %}
+                        <span class="text-secondary">
+                           <i class="fas fa-table-cells"></i> Tabla no disponible
+                        </span>
+                     {% endif %}
+
                   </td>
                   <td>
                      <a class="btn btn-outline-success btn-sm" href="{% url 'data_add' kit.id %}">

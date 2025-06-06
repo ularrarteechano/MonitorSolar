@@ -2,6 +2,24 @@ from collections import defaultdict
 from datetime import datetime
 import calendar
 
+def get_last_year_months(kits, DataMOdel):
+    last_year_months = defaultdict(dict)
+    for kit in kits:
+        year_months = get_year_months(kit.id, DataMOdel)
+        if year_months:
+            last_year = list(year_months.keys())[-1]
+            last_month = year_months[last_year][-1]
+            dictionary = {
+                'year': last_year,
+                'month': last_month,
+            }
+            last_year_months[kit.id] = dictionary
+        else:
+            last_year_months[kit.id] = {'year': None, 'month': None}
+    print(last_year_months)
+    return last_year_months
+
+
 def get_labels_and_values(year, month, data_qs):
     """
     Devuelve dos listas:
