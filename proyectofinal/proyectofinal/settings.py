@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ocyq(j27p0=1+_d4+7@%bqx(!7vr_6gi@w%5n=6g4o&eq04w6u'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['monitorsolar.pythonanywhere.com']
 
 
 # Application definition
@@ -80,11 +80,13 @@ WSGI_APPLICATION = 'proyectofinal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'proyectofinaldb',
-        "USER": "root",
-        "PASSWORD": "root",
-        "HOST": "127.0.0.1",
-        "PORT": "3306",
+        'NAME': 'monitorsolar$monitorsolar',
+        "USER": "monitorsolar",
+        "PASSWORD": "d4t4s0l4r",
+        "HOST": "monitorsolar.mysql.pythonanywhere-services.com",
+        'TEST': {
+            'NAME': 'monitorsolar$test_monitorsolar'
+            }
     }
 }
 
@@ -124,6 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -141,4 +144,8 @@ if DEBUG:
     EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'  # Change this to a suitable location
 else:
     # Production email settings
-    pass
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_HOST_USER = "monitorsolarcontact@gmail.com"
+    EMAIL_HOST_PASSWORD = 'nvyk cyen ladk cwdn'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
